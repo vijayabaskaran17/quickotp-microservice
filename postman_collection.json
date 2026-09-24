@@ -1,0 +1,149 @@
+{
+  "info": {
+    "_postman_id": "quickotp-microservice-collection",
+    "name": "QuickOTP Microservice Test Suite",
+    "description": "Comprehensive Postman requests covering health, generation, and verification endpoints with both success and failure cases.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check [GET] - Success",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/health",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "health"]
+        }
+      }
+    },
+    {
+      "name": "2. Simple OTP [GET] - Success (6 Digits)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/generate-simple?digits=6&type=numeric",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "generate-simple"],
+          "query": [
+            { "key": "digits", "value": "6" },
+            { "key": "type", "value": "numeric" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Simple OTP [GET] - Error Case (Invalid Digits Range)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/generate-simple?digits=99",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "generate-simple"],
+          "query": [
+            { "key": "digits", "value": "99" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Stateful OTP Generate [POST] - Success",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"identifier\": \"peer.student@university.edu\",\n  \"digits\": 6,\n  \"expiry_seconds\": 300,\n  \"type\": \"numeric\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/generate",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "generate"]
+        }
+      }
+    },
+    {
+      "name": "5. Stateful OTP Generate [POST] - Error Case (Missing Identifier)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"digits\": 6\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/generate",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "generate"]
+        }
+      }
+    },
+    {
+      "name": "6. Verify OTP [POST] - Success Case",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reference_id\": \"REPLACE_WITH_ACTIVE_REF_ID\",\n  \"otp\": \"REPLACE_WITH_GENERATED_OTP\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/verify",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "verify"]
+        }
+      }
+    },
+    {
+      "name": "7. Verify OTP [POST] - Error Case (Invalid Reference ID)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reference_id\": \"ref_non_existent_000\",\n  \"otp\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/otp/verify",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "otp", "verify"]
+        }
+      }
+    }
+  ]
+}
